@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavbarComponent from './components/NavbarComponent';
 import Weather from './pages/Weather';
 import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+import FooterComponent from './components/FooterComponent';
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path="/weather/:city" element={<Weather />} />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
+          <FooterComponent />
         </BrowserRouter>
       </div>
     </>

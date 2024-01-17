@@ -1,41 +1,62 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBIcon, MDBRow, MDBSpinner } from "mdb-react-ui-kit";
+import axios from 'axios';
 
-export default function Weather() {
+
+export default function CurrenLocationComponent() {
 
     const [weather, setWeather] = useState({});
     const [forecast, setForecast] = useState([]);
     const [loading, setLoading] = useState(true);
-    let { city } = useParams();
+
+    const successCallback = (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        getWeatherForecast(latitude, longitude);
+    }
+
+    const errorCallback = (error) => {
+        console.error("Error getting location:", error);
+        setLoading(false);
+    }
 
     useEffect(() => {
-        axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=42ab23d59cd1509c5f58806b2e08bb07`)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+            setLoading(false);
+        }
+    }, []);
+
+    function getWeatherForecast(latitude, longitude) {
+        axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=42ab23d59cd1509c5f58806b2e08bb07`)
             .then(response => {
                 console.log(response.data);
                 setWeather(response.data);
                 setLoading(false);
             })
             .catch(error => {
-                console.error('Errore nella chiamata API:', error);
+                console.error('Errore nella chiamata API (condizioni attuali):', error);
                 console.log(error.response);
                 setWeather({});
                 setLoading(false);
             });
 
-        axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=42ab23d59cd1509c5f58806b2e08bb07`)
-            .then((response) => {
+        axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=42ab23d59cd1509c5f58806b2e08bb07`)
+            .then(response => {
                 console.log(response.data);
                 setForecast(response.data.list);
+                setLoading(false);
             })
-            .catch((error) => {
-                console.error('Errore nella chiamata API:', error);
+            .catch(error => {
+                console.error('Errore nella chiamata API (previsioni future):', error);
                 console.log(error.response);
                 setForecast([]);
                 setLoading(false);
             });
-    }, [city])
+    }
 
     const kelvinToCelsius = (kelvin) => {
         return Math.floor(kelvin - 273.15);
@@ -46,7 +67,7 @@ export default function Weather() {
             <div>
                 {weather && forecast && weather.main ? (
                     <section>
-                        <MDBContainer style={{ marginTop: "3rem" }}>
+                        <MDBContainer style={{ marginTop: "4rem", marginBottom: "4rem" }}>
                             <MDBRow
                                 className="justify-content-center align-items-center h-100"
                                 style={{ color: "#282828" }}
@@ -212,6 +233,7 @@ export default function Weather() {
                                             </div>
                                         </MDBCardBody>
                                     </MDBCard>
+
                                 </MDBCol>
                             </MDBRow>
                         </MDBContainer>
