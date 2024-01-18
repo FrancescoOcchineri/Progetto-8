@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBIcon, MDBRow, MDBSpinner } from "mdb-react-ui-kit";
 
 export default function Weather() {
 
     const [weather, setWeather] = useState({});
     const [forecast, setForecast] = useState([]);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     let { city } = useParams();
 
@@ -22,6 +23,7 @@ export default function Weather() {
                 console.log(error.response);
                 setWeather({});
                 setLoading(false);
+                navigate('*')
             });
 
         axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=42ab23d59cd1509c5f58806b2e08bb07`)
@@ -34,6 +36,7 @@ export default function Weather() {
                 console.log(error.response);
                 setForecast([]);
                 setLoading(false);
+                navigate('*')
             });
     }, [city])
 

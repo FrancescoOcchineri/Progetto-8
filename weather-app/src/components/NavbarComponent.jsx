@@ -11,6 +11,7 @@ export default function NavbarComponent() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Link to="/" className='nav-link text-light'>Home</Link>
+                        <Link to='/italy' className='nav-link text-light'>Italy</Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
