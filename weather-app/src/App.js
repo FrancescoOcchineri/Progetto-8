@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavbarComponent from './components/NavbarComponent';
-import Weather from './pages/Weather';
+import WeatherPage from './pages/WeatherPage';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import FooterComponent from './components/FooterComponent';
@@ -14,7 +14,7 @@ function App() {
           <NavbarComponent />
           <Routes>
             <Route path='/' element={<HomePage />} />
-            <Route path="/weather/:city" element={<Weather />} />
+            <Route path="/weather/:city" element={<WeatherPage />} />
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
           <FooterComponent />

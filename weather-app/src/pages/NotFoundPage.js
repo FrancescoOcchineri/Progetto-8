@@ -12,18 +12,20 @@ export default function NotFoundPage() {
 
     return (
         <>
-            <div className='d-flex flex-column align-items-center'>
-                <div className='d-flex justify-content-center'>
-                    <h1 className='text-black' style={{ fontSize: '15rem' }}>404</h1>
+            <div style={{ minHeight: '87.7vh', display: 'flex', flexDirection: 'column' }}>
+                <div className='d-flex flex-column align-items-center'>
+                    <div className='d-flex justify-content-center mt-5'>
+                        <img src='https://cdn-icons-png.flaticon.com/512/4791/4791025.png' alt='cloud' style={{ width: '35rem', position: 'relative' }} />
+                    </div>
+                    <h1 style={{ position: 'absolute', top: '13rem', fontSize: '9rem', color: '#FFD200', fontWeight: 'bold' }}>404</h1>
+                    <Button
+                        variant='light'
+                        className='fs-6 mt-5'
+                        onClick={handleClick}
+                    >
+                        Go Home
+                    </Button>
                 </div>
-                <p className='d-flex justify-content-center text-black' style={{ fontSize: '3rem' }}>Page not found</p>
-                <Button
-                    variant='light'
-                    className='fs-6'
-                    onClick={handleClick}
-                >
-                    Go Home
-                </Button>
             </div>
         </>
     )

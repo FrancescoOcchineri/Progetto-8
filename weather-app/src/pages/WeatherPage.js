@@ -46,10 +46,10 @@ export default function Weather() {
 
     return (
         <>
-            <div>
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
                 {weather && forecast && weather.main ? (
                     <section>
-                        <MDBContainer style={{ marginTop: "3rem" }}>
+                        <MDBContainer style={{ marginTop: "4rem", marginBottom: "4rem" }}>
                             <MDBRow
                                 className="justify-content-center align-items-center h-100"
                                 style={{ color: "#282828" }}

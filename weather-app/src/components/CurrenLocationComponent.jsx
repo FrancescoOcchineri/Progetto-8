@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBIcon, MDBRow, MDBSpinner } from "mdb-react-ui-kit";
+import { Alert, Container } from 'react-bootstrap'
 import axios from 'axios';
 
 
@@ -8,25 +9,28 @@ export default function CurrenLocationComponent() {
     const [weather, setWeather] = useState({});
     const [forecast, setForecast] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const successCallback = (position) => {
+    const successCall = (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
         getWeatherForecast(latitude, longitude);
     }
 
-    const errorCallback = (error) => {
+    const errorCall = (error) => {
         console.error("Error getting location:", error);
+        setError(true);
         setLoading(false);
     }
 
     useEffect(() => {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+            navigator.geolocation.getCurrentPosition(successCall, errorCall);
         } else {
             console.error("Geolocation is not supported by this browser.");
             setLoading(false);
+            setError("Geolocation is not supported by this browser.");
         }
     }, []);
 
@@ -64,8 +68,8 @@ export default function CurrenLocationComponent() {
 
     return (
         <>
-            <div>
-                {weather && forecast && weather.main ? (
+            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+                {!loading && !error && weather && forecast && weather.main && (
                     <section>
                         <MDBContainer style={{ marginTop: "4rem", marginBottom: "4rem" }}>
                             <MDBRow
@@ -238,10 +242,23 @@ export default function CurrenLocationComponent() {
                             </MDBRow>
                         </MDBContainer>
                     </section>
-                ) : (
-                    <p className='d-flex justify-content-center mt-5'> <MDBSpinner grow style={{ width: '3rem', height: '3rem' }}>
-                        <span className='visually-hidden'>Loading...</span>
-                    </MDBSpinner></p>
+                )}
+                {loading && (
+                    <p className='d-flex justify-content-center mt-5'>
+                        <MDBSpinner grow style={{ width: '3rem', height: '3rem' }}>
+                            <span className='visually-hidden'>Loading...</span>
+                        </MDBSpinner>
+                    </p>
+                )}
+                {!loading && error && (
+                    <Container className='mt-5'>
+                        <Alert variant="danger" dismissible>
+                            <Alert.Heading>Error getting location!</Alert.Heading>
+                            <p>
+                                please try again or check that you have allowed access to the location, if you want to see the weather in your city.
+                            </p>
+                        </Alert>
+                    </Container>
                 )}
             </div>
         </>
